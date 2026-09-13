@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard — Secure Message System</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<!-- Loading overlay -->
+<div id="loadingOverlay" class="loading-overlay hidden">
+  <div class="spinner"></div>
+</div>
+
+<!-- Sidebar overlay (mobile) -->
+<div id="sidebarOverlay" class="sidebar-overlay"></div>
+
+<div class="app-shell">
+
+  <!-- ── Sidebar ─────────────────────────────────────────── -->
+  <aside class="sidebar" id="sidebar">
+
+    <div class="sidebar-brand">
+      <div class="brand-icon">🔒</div>
+      <div>
+        <div class="sidebar-brand-text">SecureMsg</div>
+        <div class="sidebar-brand-sub">RSA-2048 Encrypted</div>
+      </div>
+    </div>
+
+    <span class="sidebar-section-label">Main Menu</span>
+    <ul class="sidebar-nav">
+      <li><a href="dashboard.html" class="active"><span class="nav-icon">🏠</span> Dashboard</a></li>
+      <li>
+        <a href="inbox.html">
+          <span class="nav-icon">📥</span> Inbox
+          <span class="badge-pill hidden" id="unreadBadge"></span>
+        </a>
+      </li>
+      <li><a href="sent.html"><span class="nav-icon">📤</span> Sent</a></li>
+      <li><a href="send.html"><span class="nav-icon">✉️</span> Send Message</a></li>
+    </ul>
+
+    <div class="sidebar-footer">
+      <div class="user-info-mini">
+        <div class="user-avatar">?</div>
+        <div>
+          <div class="user-name">—</div>
+          <div class="user-role">USER</div>
+        </div>
+      </div>
+      <button class="btn-logout">🚪 Logout</button>
+    </div>
+
+  </aside>
+
+  <!-- ── Main content ────────────────────────────────────── -->
+  <div class="main-content">
+
+    <!-- Topbar -->
+    <header class="topbar">
+      <div>
+        <button class="hamburger" id="hamburger" aria-label="Menu">☰</button>
+      </div>
+      <div>
+        <div class="topbar-title">Dashboard</div>
+        <div class="topbar-sub">Overview of your secure messaging activity</div>
+      </div>
+      <div class="topbar-right">
+        <span class="rsa-badge">🔒 RSA-2048</span>
+      </div>
+    </header>
+
+    <!-- Page body -->
+    <main class="page-body">
+
+      <!-- Welcome banner -->
+      <div class="card" style="margin-bottom:1.5rem;background:linear-gradient(135deg,#1e40af,#2563eb);color:#fff;border:none;">
+        <div class="card-body" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;">
+          <div>
+            <h2 style="color:#fff;font-size:1.25rem;margin-bottom:.3rem;">
+              Welcome back, <span id="welcomeName">—</span>!
+            </h2>
+            <p style="color:#bfdbfe;font-size:.87rem;margin:0;">
+              Your messages are secured with RSA-2048 asymmetric encryption.
+            </p>
+          </div>
+          <a href="send.html" class="btn btn-secondary" style="background:rgba(255,255,255,.15);color:#fff;border-color:rgba(255,255,255,.3);">
+            ✉️ &nbsp;New Message
+          </a>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon blue">📥</div>
+          <div>
+            <div class="stat-value" id="statUnread">—</div>
+            <div class="stat-label">Unread Messages</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon green">📨</div>
+          <div>
+            <div class="stat-value" id="statInbox">—</div>
+            <div class="stat-label">Total Received</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon orange">📤</div>
+          <div>
+            <div class="stat-value" id="statSent">—</div>
+            <div class="stat-label">Messages Sent</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon cyan">👥</div>
+          <div>
+            <div class="stat-value" id="statUsers">—</div>
+            <div class="stat-label">Registered Users</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Two-column layout -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin-bottom:1.25rem;" class="dash-grid">
+
+        <!-- Recent inbox -->
+        <div class="card">
+          <div class="card-header">
+            <h3>📥 Recent Inbox</h3>
+            <a href="inbox.html" class="btn btn-secondary btn-sm">View All</a>
+          </div>
+          <div class="card-body" style="padding:.5rem 0;">
+            <div id="recentInbox">
+              <div class="spinner-wrap"><div class="spinner"></div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent sent -->
+        <div class="card">
+          <div class="card-header">
+            <h3>📤 Recently Sent</h3>
+            <a href="sent.html" class="btn btn-secondary btn-sm">View All</a>
+          </div>
+          <div class="card-body" style="padding:.5rem 0;">
+            <div id="recentSent">
+              <div class="spinner-wrap"><div class="spinner"></div></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- RSA info card -->
+      <div class="card">
+        <div class="card-header"><h3>🔐 How RSA Encryption Works in This System</h3></div>
+        <div class="card-body">
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;">
+
+            <div style="padding:.75rem;background:var(--primary-light);border-radius:var(--radius-sm);">
+              <div style="font-size:1.5rem;margin-bottom:.4rem;">🗝️</div>
+              <div style="font-weight:700;font-size:.88rem;color:var(--primary-dark);margin-bottom:.3rem;">Key Pair Generation</div>
+              <div style="font-size:.8rem;color:var(--gray-600);">
+                Each user gets a unique RSA-2048 key pair on registration.
+                Public key is shared; private key stays on the server.
+              </div>
+            </div>
+
+            <div style="padding:.75rem;background:var(--warning-bg);border-radius:var(--radius-sm);">
+              <div style="font-size:1.5rem;margin-bottom:.4rem;">🔒</div>
+              <div style="font-weight:700;font-size:.88rem;color:var(--warning);margin-bottom:.3rem;">Encryption</div>
+              <div style="font-size:.8rem;color:var(--gray-600);">
+                Messages are encrypted with the recipient's public key.
+                Only the recipient's private key can decrypt them.
+              </div>
+            </div>
+
+            <div style="padding:.75rem;background:var(--success-bg);border-radius:var(--radius-sm);">
+              <div style="font-size:1.5rem;margin-bottom:.4rem;">🔓</div>
+              <div style="font-weight:700;font-size:.88rem;color:var(--success);margin-bottom:.3rem;">Decryption</div>
+              <div style="font-size:.8rem;color:var(--gray-600);">
+                Decryption uses the recipient's private key server-side.
+                Plaintext never stored; private key never exposed.
+              </div>
+            </div>
+
+            <div style="padding:.75rem;background:var(--info-bg);border-radius:var(--radius-sm);">
+              <div style="font-size:1.5rem;margin-bottom:.4rem;">📐</div>
+              <div style="font-weight:700;font-size:.88rem;color:var(--info);margin-bottom:.3rem;">Algorithm</div>
+              <div style="font-size:.8rem;color:var(--gray-600);">
+                RSA-2048 · OAEP/SHA-256 padding · Max 190 chars.
+                Java KeyPairGenerator + Cipher APIs.
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Account info card -->
+      <div class="card" style="margin-top:1.25rem;">
+        <div class="card-header"><h3>👤 Your Account</h3></div>
+        <div class="card-body">
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:.75rem;">
+            <div>
+              <div style="font-size:.73rem;font-weight:700;color:var(--gray-400);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.25rem;">Username</div>
+              <div id="acctUsername" style="font-weight:600;color:var(--gray-800);">—</div>
+            </div>
+            <div>
+              <div style="font-size:.73rem;font-weight:700;color:var(--gray-400);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.25rem;">Email</div>
+              <div id="acctEmail" style="color:var(--gray-700);">—</div>
+            </div>
+            <div>
+              <div style="font-size:.73rem;font-weight:700;color:var(--gray-400);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.25rem;">Role</div>
+              <div id="acctRole"><span class="chip chip-sent">USER</span></div>
+            </div>
+            <div>
+              <div style="font-size:.73rem;font-weight:700;color:var(--gray-400);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.25rem;">RSA Key Pair</div>
+              <div style="color:var(--success);font-weight:600;font-size:.87rem;">✓ Generated (RSA-2048)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div><!-- /.main-content -->
+</div><!-- /.app-shell -->
+
+<style>
+  @media (max-width: 640px) {
+    .dash-grid { grid-template-columns: 1fr !important; }
+  }
+</style>
+
+<script src="js/api.js"></script>
+<script src="js/dashboard.js"></script>
+</body>
+</html>

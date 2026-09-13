@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Send Message — Secure Message System</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<div id="loadingOverlay" class="loading-overlay hidden">
+  <div class="spinner"></div>
+</div>
+<div id="sidebarOverlay" class="sidebar-overlay"></div>
+
+<div class="app-shell">
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-icon">🔒</div>
+      <div>
+        <div class="sidebar-brand-text">SecureMsg</div>
+        <div class="sidebar-brand-sub">RSA-2048 Encrypted</div>
+      </div>
+    </div>
+    <span class="sidebar-section-label">Main Menu</span>
+    <ul class="sidebar-nav">
+      <li><a href="dashboard.html"><span class="nav-icon">🏠</span> Dashboard</a></li>
+      <li>
+        <a href="inbox.html">
+          <span class="nav-icon">📥</span> Inbox
+          <span class="badge-pill hidden" id="unreadBadge"></span>
+        </a>
+      </li>
+      <li><a href="sent.html"><span class="nav-icon">📤</span> Sent</a></li>
+      <li><a href="send.html" class="active"><span class="nav-icon">✉️</span> Send Message</a></li>
+    </ul>
+    <div class="sidebar-footer">
+      <div class="user-info-mini">
+        <div class="user-avatar">?</div>
+        <div><div class="user-name">—</div><div class="user-role">USER</div></div>
+      </div>
+      <button class="btn-logout">🚪 Logout</button>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <div class="main-content">
+    <header class="topbar">
+      <button class="hamburger" id="hamburger" aria-label="Menu">☰</button>
+      <div>
+        <div class="topbar-title">✉️ Send Encrypted Message</div>
+        <div class="topbar-sub">Message encrypted with recipient's RSA-2048 public key</div>
+      </div>
+      <div class="topbar-right">
+        <span class="rsa-badge">🔒 RSA-2048</span>
+      </div>
+    </header>
+
+    <main class="page-body">
+
+      <div style="max-width:680px;">
+
+        <!-- RSA flow explanation -->
+        <div class="rsa-info-box" style="margin-bottom:1.25rem;">
+          <span class="info-icon">🔒</span>
+          <span>
+            Your message will be <strong>encrypted server-side</strong> using the
+            recipient's <strong>RSA-2048 public key</strong> before storage.
+            Only the recipient's private key can decrypt it.
+            Plaintext is never stored in the database.
+          </span>
+        </div>
+
+        <div id="sendAlert" class="alert hidden"></div>
+
+        <!-- Compose form -->
+        <div class="card">
+          <div class="card-header">
+            <h3>📝 Compose Message</h3>
+            <span class="algo-tag">🔒 RSA-2048 / OAEP</span>
+          </div>
+          <div class="card-body">
+
+            <form id="sendForm" novalidate>
+
+              <div class="form-group">
+                <label for="recipientSelect">Recipient</label>
+                <select id="recipientSelect" required>
+                  <option value="">— Loading users… —</option>
+                </select>
+                <div id="recipientInfo" style="margin-top:.4rem;font-size:.78rem;color:var(--gray-500);"></div>
+              </div>
+
+              <div class="form-group">
+                <label for="messageContent">
+                  Message
+                  <span style="font-weight:400;color:var(--gray-400);font-size:.78rem;">
+                    (max 190 characters — RSA-2048 OAEP limit)
+                  </span>
+                </label>
+                <textarea
+                  id="messageContent"
+                  placeholder="Type your message here…"
+                  rows="5"
+                  maxlength="190"
+                  required
+                ></textarea>
+                <div class="char-counter"><span id="charCount">0</span> / 190</div>
+              </div>
+
+              <!-- Encryption flow visual -->
+              <div style="
+                background:var(--gray-50);
+                border:1px solid var(--gray-200);
+                border-radius:var(--radius-sm);
+                padding:.75rem 1rem;
+                margin-bottom:1rem;
+                font-size:.78rem;
+                color:var(--gray-600);
+              ">
+                <strong style="color:var(--gray-700);">Encryption Flow:</strong><br/>
+                <span style="font-family:monospace;">
+                  Plaintext → RSA-2048 Encrypt (recipient's public key)
+                  → Base64 Ciphertext → Stored in Database
+                </span>
+              </div>
+
+              <div style="display:flex;gap:.75rem;flex-wrap:wrap;">
+                <button type="submit" class="btn btn-primary" id="sendBtn">
+                  🔒 Encrypt &amp; Send
+                </button>
+                <button type="button" class="btn btn-secondary" id="clearBtn">
+                  ✕ Clear
+                </button>
+              </div>
+
+            </form>
+          </div>
+        </div>
+
+        <!-- Success result panel (hidden until send succeeds) -->
+        <div id="resultPanel" class="card hidden" style="margin-top:1.25rem;border-color:var(--success);">
+          <div class="card-header" style="background:var(--success-bg);">
+            <h3 style="color:var(--success);">✓ Message Sent Successfully</h3>
+            <span class="algo-tag">RSA-2048 Encrypted</span>
+          </div>
+          <div class="card-body">
+            <div class="decrypt-row">
+              <div class="decrypt-label">To</div>
+              <div class="decrypt-value" id="resultRecipient">—</div>
+            </div>
+            <div class="decrypt-row">
+              <div class="decrypt-label">Sent At</div>
+              <div class="decrypt-value" id="resultTime">—</div>
+            </div>
+            <div class="decrypt-row">
+              <div class="decrypt-label">Encrypted Content (stored in DB)</div>
+              <div class="decrypt-value cipher" id="resultCipher">—</div>
+            </div>
+            <div class="decrypt-row" style="margin-bottom:0;">
+              <div class="decrypt-label">Status</div>
+              <div class="decrypt-value">
+                <span class="chip chip-sent">SENT</span>
+                &nbsp;
+                <span class="algo-tag">🔒 RSA-2048 / OAEP with SHA-256</span>
+              </div>
+            </div>
+            <div style="margin-top:1rem;display:flex;gap:.75rem;flex-wrap:wrap;">
+              <a href="sent.html" class="btn btn-outline btn-sm">📤 View Sent</a>
+              <button class="btn btn-primary btn-sm" id="sendAnotherBtn">✉️ Send Another</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+</div>
+
+<script src="js/api.js"></script>
+<script src="js/send.js"></script>
+</body>
+</html>

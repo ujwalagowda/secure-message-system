@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Register — Secure Message System</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body class="auth-page">
+
+  <div class="auth-card">
+
+    <!-- Logo / title -->
+    <div class="auth-logo">
+      <div class="lock-icon">🔑</div>
+      <h1>Create Account</h1>
+      <p>RSA-2048 key pair generated on registration</p>
+    </div>
+
+    <!-- RSA badge -->
+    <div style="text-align:center;margin-bottom:1.5rem;">
+      <span class="auth-badge">🔒 RSA-2048 Encrypted</span>
+    </div>
+
+    <!-- Alert -->
+    <div id="registerAlert" class="alert alert-danger hidden" role="alert"></div>
+
+    <!-- RSA info note -->
+    <div class="rsa-info-box" style="margin-bottom:1.1rem;">
+      <span class="info-icon">ℹ️</span>
+      <span>
+        A unique <strong>RSA-2048 key pair</strong> will be generated for your account
+        when you register. Your public key encrypts incoming messages.
+        Your private key decrypts them — it never leaves the server.
+      </span>
+    </div>
+
+    <!-- Register form -->
+    <form id="registerForm" novalidate>
+
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input
+          type="text"
+          id="username"
+          name="username"
+          placeholder="Choose a username (min 3 chars)"
+          autocomplete="username"
+          required
+          minlength="3"
+          maxlength="50"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          placeholder="your@email.com"
+          autocomplete="email"
+          required
+          maxlength="100"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input
+          type="password"
+          id="password"
+          name="password"
+          placeholder="Min 6 characters"
+          autocomplete="new-password"
+          required
+          minlength="6"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="confirmPassword">Confirm Password</label>
+        <input
+          type="password"
+          id="confirmPassword"
+          name="confirmPassword"
+          placeholder="Re-enter password"
+          autocomplete="new-password"
+          required
+        />
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-full btn-lg" style="margin-top:.5rem;">
+        Create Account
+      </button>
+
+    </form>
+
+    <hr class="divider" />
+
+    <p style="text-align:center;font-size:.87rem;color:#64748b;">
+      Already have an account?
+      <a href="login.html" style="font-weight:600;">Sign in</a>
+    </p>
+
+    <p style="text-align:center;font-size:.72rem;color:#94a3b8;margin-top:1.25rem;line-height:1.5;">
+      B.E. CSE College Project &nbsp;|&nbsp;
+      RSA-2048 · OAEP · Spring Boot · MySQL
+    </p>
+
+  </div>
+
+  <!-- Scripts: api.js first, then auth.js -->
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+</body>
+</html>

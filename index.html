@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Secure Message System — RSA</title>
+  <script>
+    // Immediate redirect — no flash of content
+    (function () {
+      var token = localStorage.getItem('token');
+      window.location.replace(token ? 'dashboard.html' : 'login.html');
+    })();
+  </script>
+</head>
+<body>
+  <p style="font-family:sans-serif;text-align:center;margin-top:3rem;color:#64748b;">
+    Redirecting…
+  </p>
+</body>
+</html>

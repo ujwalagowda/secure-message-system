@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sent — Secure Message System</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<div id="loadingOverlay" class="loading-overlay hidden">
+  <div class="spinner"></div>
+</div>
+<div id="sidebarOverlay" class="sidebar-overlay"></div>
+
+<div class="app-shell">
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-icon">🔒</div>
+      <div>
+        <div class="sidebar-brand-text">SecureMsg</div>
+        <div class="sidebar-brand-sub">RSA-2048 Encrypted</div>
+      </div>
+    </div>
+    <span class="sidebar-section-label">Main Menu</span>
+    <ul class="sidebar-nav">
+      <li><a href="dashboard.html"><span class="nav-icon">🏠</span> Dashboard</a></li>
+      <li>
+        <a href="inbox.html">
+          <span class="nav-icon">📥</span> Inbox
+          <span class="badge-pill hidden" id="unreadBadge"></span>
+        </a>
+      </li>
+      <li><a href="sent.html" class="active"><span class="nav-icon">📤</span> Sent</a></li>
+      <li><a href="send.html"><span class="nav-icon">✉️</span> Send Message</a></li>
+    </ul>
+    <div class="sidebar-footer">
+      <div class="user-info-mini">
+        <div class="user-avatar">?</div>
+        <div><div class="user-name">—</div><div class="user-role">USER</div></div>
+      </div>
+      <button class="btn-logout">🚪 Logout</button>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <div class="main-content">
+    <header class="topbar">
+      <button class="hamburger" id="hamburger" aria-label="Menu">☰</button>
+      <div>
+        <div class="topbar-title">📤 Sent Messages</div>
+        <div class="topbar-sub">Messages you have sent</div>
+      </div>
+      <div class="topbar-right">
+        <span class="rsa-badge">🔒 RSA-2048</span>
+        <a href="send.html" class="btn btn-primary btn-sm">✉️ New Message</a>
+      </div>
+    </header>
+
+    <main class="page-body">
+
+      <div class="rsa-info-box" style="margin-bottom:1.25rem;">
+        <span class="info-icon">ℹ️</span>
+        <span>
+          Sent messages are stored as <strong>RSA-2048 ciphertext</strong>.
+          As the sender, you <strong>cannot decrypt</strong> these messages —
+          only the recipient's private key can. This demonstrates RSA's
+          asymmetric nature.
+        </span>
+      </div>
+
+      <div id="alertBox" class="alert alert-danger hidden"></div>
+
+      <div id="messageList">
+        <div class="spinner-wrap"><div class="spinner"></div></div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<script src="js/api.js"></script>
+<script src="js/sent.js"></script>
+</body>
+</html>

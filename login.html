@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login — Secure Message System</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body class="auth-page">
+
+  <div class="auth-card">
+
+    <!-- Logo / title -->
+    <div class="auth-logo">
+      <div class="lock-icon">🔐</div>
+      <h1>Secure Message System</h1>
+      <p>RSA Cryptographic Communication</p>
+    </div>
+
+    <!-- RSA badge -->
+    <div style="text-align:center;margin-bottom:1.5rem;">
+      <span class="auth-badge">🔒 RSA-2048 Encrypted</span>
+    </div>
+
+    <!-- Alert -->
+    <div id="loginAlert" class="alert alert-danger hidden" role="alert"></div>
+
+    <!-- Login form -->
+    <form id="loginForm" novalidate>
+
+      <div class="form-group">
+        <label for="usernameOrEmail">Username or Email</label>
+        <input
+          type="text"
+          id="usernameOrEmail"
+          name="usernameOrEmail"
+          placeholder="Enter username or email"
+          autocomplete="username"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input
+          type="password"
+          id="password"
+          name="password"
+          placeholder="Enter your password"
+          autocomplete="current-password"
+          required
+        />
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-full btn-lg" style="margin-top:.5rem;">
+        Sign In
+      </button>
+
+    </form>
+
+    <hr class="divider" />
+
+    <p style="text-align:center;font-size:.87rem;color:#64748b;">
+      Don't have an account?
+      <a href="register.html" style="font-weight:600;">Create one</a>
+    </p>
+
+    <!-- Project info footer -->
+    <p style="text-align:center;font-size:.72rem;color:#94a3b8;margin-top:1.25rem;line-height:1.5;">
+      B.E. CSE College Project &nbsp;|&nbsp;
+      RSA-2048 · OAEP · Spring Boot · MySQL
+    </p>
+
+  </div>
+
+  <!-- Scripts: api.js first, then auth.js -->
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+</body>
+</html>
